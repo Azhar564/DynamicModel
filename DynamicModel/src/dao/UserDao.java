@@ -33,7 +33,7 @@ public class UserDao {
                 String sql = "SELECT * FROM user";
                 preSmt = koneksi.prepareStatement(sql);
                 rs = preSmt.executeQuery();
-                get = new Object[getRowCount(rs)][4];
+                get = new Object[getRowCount(rs)][rs.getMetaData().getColumnCount()];
                 int i = 0;
                 while (rs.next()) {
                     
@@ -74,7 +74,7 @@ public class UserDao {
     }
 
     return 0;
-}
+    }
     
     public static void main(String[] args) {
         UserDao dao = new UserDao();
