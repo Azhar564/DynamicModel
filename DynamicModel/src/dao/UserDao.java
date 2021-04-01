@@ -27,13 +27,16 @@ public class UserDao {
     }
     
     public Data getData(){
-        Object[][] get /*=new Object[4][4]*/;
+        Object[][] get;
         Data data = new Data();
+        
         try {
                 String sql = "SELECT * FROM user";
                 preSmt = koneksi.prepareStatement(sql);
                 rs = preSmt.executeQuery();
+                
                 get = new Object[getRowCount(rs)][rs.getMetaData().getColumnCount()];
+                
                 int i = 0;
                 while (rs.next()) {
                     
@@ -54,6 +57,7 @@ public class UserDao {
         return data;
     }
     
+    //count the number of rows and return as int
     private int getRowCount(ResultSet resultSet) {
     if (resultSet == null) {
         return 0;
