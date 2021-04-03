@@ -82,6 +82,6 @@ public class UserDao {
     
     public static void main(String[] args) {
         UserDao dao = new UserDao();
-        System.out.println(dao.getData().getData()[0][3]);
+        System.out.println(dao.getData().getData()[1][0]);
     }
 }
