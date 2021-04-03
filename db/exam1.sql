@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 02, 2021 at 12:44 AM
+-- Generation Time: Apr 03, 2021 at 03:30 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `exam1`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `karyawan`
+--
+
+CREATE TABLE `karyawan` (
+  `KaryawanID` int(11) NOT NULL,
+  `Email` varchar(100) NOT NULL,
+  `Password` varchar(25) NOT NULL,
+  `Name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `karyawan`
+--
+
+INSERT INTO `karyawan` (`KaryawanID`, `Email`, `Password`, `Name`) VALUES
+(1, 'admin123@gmail.com', '114', 'admin'),
+(2, 'gita@gmail.com', '727', 'gita');
 
 -- --------------------------------------------------------
 
@@ -47,6 +68,12 @@ INSERT INTO `user` (`UserID`, `Email`, `Name`, `Age`) VALUES
 --
 
 --
+-- Indexes for table `karyawan`
+--
+ALTER TABLE `karyawan`
+  ADD PRIMARY KEY (`KaryawanID`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -55,6 +82,12 @@ ALTER TABLE `user`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `karyawan`
+--
+ALTER TABLE `karyawan`
+  MODIFY `KaryawanID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user`
