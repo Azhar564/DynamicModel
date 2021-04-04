@@ -1,2 +1,2 @@
 # Dynamic Model
- Dynamic Model for Java
+ buat ukom
