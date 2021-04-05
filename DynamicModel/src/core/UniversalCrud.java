@@ -10,12 +10,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import model.Data;
 
-enum save{
-    add,
-    edit
-}
+
 
 /**
  *
@@ -37,32 +35,42 @@ public class UniversalCrud {
         nameTable = table;
     }
     
-    public void init(String Table){
-        
+    public ResultSet init(String query){
+        ResultSet rse;
         try{
-            String sql = "SELECT * FROM "+Table;
+            String sql = query;
             preSmt = koneksi.prepareStatement(sql);
-            rs = preSmt.executeQuery();
+            rse = preSmt.executeQuery();
             
-            numRow = 0;
-            numColumn = rs.getMetaData().getColumnCount();
-            nameColumn = getColumnName(rs);
-            
-            while(rs.next()){
-                numRow++;
-            }
-            
-            rs.beforeFirst();
+            numColumn = rse.getMetaData().getColumnCount();
+            nameColumn = getColumnName(rse);
+            numRow = getRowCount(rse);
         }
         catch(SQLException e){
             System.out.println(e.getMessage());
+            rse = null;
         }
+        return rse;
+    }
+    
+    private int getRowCount(ResultSet rs){
+        int size = 0;
+        try {
+            rs.last();
+            size = rs.getRow();
+            rs.beforeFirst();
+        } catch (SQLException ex) {
+            System.out.println("gagal row count : " + ex.getMessage());
+        }
+        return size;
     }
     
     private String[] getColumnName(ResultSet rs){
         
         String[] name = new String[numColumn];
+        
         try {
+            
             for (int i = 0; i < numColumn; i++) {
                 name[i] = rs.getMetaData().getColumnName(i+1);
             }
@@ -74,14 +82,12 @@ public class UniversalCrud {
     }
     
     public Data getAllData(String table){
-        init(nameTable);
         Object[][] get;
         Data data = new Data();
         
         try {
                 String sql = "SELECT * FROM "+table;
-                preSmt = koneksi.prepareStatement(sql);
-                rs = preSmt.executeQuery();
+                rs = init(sql);
                 
                 get = new Object[numRow][numColumn];
                 
@@ -105,7 +111,6 @@ public class UniversalCrud {
     }
     
     public Object[] getDataById(Object id, String table){
-        init(nameTable);
         Object[][] data = getAllData(table).getData();
         Object[] column = new Object[numColumn];
         
@@ -118,11 +123,16 @@ public class UniversalCrud {
         return column;
     }
     
+    private String removeFirstandLast(String str)
+    {
+        str = str.substring(1, str.length() - 1);
+        return str;
+    }
+    
     public boolean saveData(Object[] data, save set){
-        init(nameTable);
         String sql = null;
         if (set.equals(save.add)) {
-                sql = "Insert into "+nameTable+" values"+" (";
+                sql = "Insert into "+nameTable+" (" + removeFirstandLast(Arrays.toString(nameColumn)) + ") values"+" (";
                 for (int i = 0; i < data.length-1; i++) {
                     sql += "'"+data[i]+"', ";
                 }
@@ -142,6 +152,7 @@ public class UniversalCrud {
             System.out.println(sql);
             preSmt = koneksi.prepareStatement(sql);
             preSmt.executeUpdate();
+            
             return true;
         }
         catch(SQLException e){
@@ -165,9 +176,10 @@ public class UniversalCrud {
     }
     
     public static void main(String[] args) {
-        UniversalCrud dao = new UniversalCrud("karyawan");
-        Object[] get = dao.getDataById("K001", dao.nameTable);
-        get[2] = "11462333";
-        System.out.println(dao.DeleteDataById("K001"));
+//        UniversalCrud dao = new UniversalCrud("karyawan");
+//        Object[] get = dao.getDataById("K001", dao.nameTable);
+//        get[2] = "11462333";
+//        System.out.println(dao.DeleteDataById("K001"));
+
     }
 }
