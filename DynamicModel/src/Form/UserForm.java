@@ -263,7 +263,7 @@ public class UserForm extends javax.swing.JFrame {
         state = save.add;
         setJText(null, getJText(panelUser));
         setJText(null, getJText(getContentPane()));
-        tableUser.setRowSorter(null);
+        rowSorter.setRowFilter(null);
     }//GEN-LAST:event_clearBtnActionPerformed
 
     private void searchTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtKeyReleased
