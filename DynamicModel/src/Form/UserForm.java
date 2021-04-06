@@ -11,8 +11,10 @@ import java.awt.Container;
 import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -20,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class UserForm extends javax.swing.JFrame {
 
+    private TableRowSorter<TableModel> rowSorter;
     private UniversalCrud crud;
     private save state;
     /**
@@ -54,6 +57,8 @@ public class UserForm extends javax.swing.JFrame {
         emailTxt = new javax.swing.JTextField();
         nameTxt = new javax.swing.JTextField();
         ageTxt = new javax.swing.JTextField();
+        searchTxt = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("User");
@@ -179,25 +184,44 @@ public class UserForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        searchTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchTxtKeyReleased(evt);
+            }
+        });
+
+        jLabel5.setText("Search");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(63, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(panelUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -238,9 +262,23 @@ public class UserForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         state = save.add;
         setJText(null, getJText(panelUser));
+        setJText(null, getJText(getContentPane()));
+        tableUser.setRowSorter(null);
     }//GEN-LAST:event_clearBtnActionPerformed
 
-    private void fillTable(){
+    private void searchTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTxtKeyReleased
+        // TODO add your handling code here:
+        this.rowSorter = new TableRowSorter<>(tableUser.getModel());
+        String text = searchTxt.getText();;;
+        if (text.trim().length() == 0) {
+           rowSorter.setRowFilter(null);
+        } else {
+           rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+        }
+        tableUser.setRowSorter(rowSorter);
+    }//GEN-LAST:event_searchTxtKeyReleased
+    
+    private DefaultTableModel fillTable(){
         DefaultTableModel tableModel = new DefaultTableModel(
                 crud.getAllData(crud.nameTable).getData(),
                 crud.nameColumn)
@@ -252,6 +290,7 @@ public class UserForm extends javax.swing.JFrame {
                 };
         tableUser.setModel(tableModel);
         state = save.add;
+        return tableModel;
     }
     
     
@@ -350,10 +389,12 @@ public class UserForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameTxt;
     private javax.swing.JPanel panelUser;
     private javax.swing.JButton saveBtn;
+    private javax.swing.JTextField searchTxt;
     private javax.swing.JTable tableUser;
     private javax.swing.JTextField userTxt;
     // End of variables declaration//GEN-END:variables
